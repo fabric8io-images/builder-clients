@@ -22,4 +22,8 @@ RUN mkdir /tmp/gofabric8 && curl --retry 999 --retry-max-time 0  -sSL https://gi
   mv /tmp/gofabric8/* /usr/bin/ && \
   rm -rf /tmp/gofabric8/
 
+RUN curl -L https://github.com/github/hub/releases/download/v2.2.3/hub-linux-amd64-2.2.3.tgz | tar xzv && \
+  mv hub-linux-amd64-2.2.3/bin/hub /usr/bin/ && \
+  rm -rf hub-linux-amd64-2.2.3
+
 CMD sleep infinity
