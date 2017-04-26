@@ -8,7 +8,7 @@ RUN curl --retry 999 --retry-max-time 0  -sSL https://bintray.com/artifact/downl
   unzip helm.zip && \
   mv helm /usr/bin/
 
-RUN curl --retry 999 --retry-max-time 0  -sSL https://github.com/openshift/origin/releases/download/v1.4.1/openshift-origin-client-tools-v1.4.1-3f9807a-linux-64bit.tar.gz | tar xzv && \
+RUN curl --retry 999 --retry-max-time 0  -sSL https://github.com/openshift/origin/releases/download/v1.5.0/openshift-origin-client-tools-v1.5.0-031cbe4-linux-64bit.tar.gz | tar xzv && \
   mv openshift-origin-*/* /usr/bin/
 
 ENV KUBECTL_VERSION 1.4.8
