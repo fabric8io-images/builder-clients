@@ -38,4 +38,6 @@ RUN curl -L https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cl
 ENV PATH=$PATH:/root/home/google-cloud-sdk/bin
 
 RUN gcloud components install alpha beta
+ENV DOCKER_API_VERSION 1.23
+
 CMD sleep infinity
