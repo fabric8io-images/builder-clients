@@ -44,4 +44,10 @@ ENV PATH=$PATH:/root/home/google-cloud-sdk/bin
 RUN gcloud components install alpha beta
 ENV DOCKER_API_VERSION 1.23
 
+# exposecontroller
+ENV EXPOSECONTROLLER_VERSION 2.3.24
+RUN curl -L https://github.com/fabric8io/exposecontroller/releases/download/v$EXPOSECONTROLLER_VERSION/exposecontroller-linux-amd64 > exposecontroller && \
+  chmod +x exposecontroller && \
+  mv exposecontroller /usr/bin/
+
 CMD sleep infinity
