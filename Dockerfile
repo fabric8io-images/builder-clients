@@ -50,4 +50,6 @@ RUN curl -L https://github.com/fabric8io/exposecontroller/releases/download/v$EX
   chmod +x exposecontroller && \
   mv exposecontroller /usr/bin/
 
+ENV UPDATEBOT_VERSION 0.0.0
+
 CMD sleep infinity
