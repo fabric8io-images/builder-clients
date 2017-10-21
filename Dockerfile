@@ -8,7 +8,7 @@ RUN yum update -y && \
   make prefix=/usr/ install && \
   popd && \
   rm -rf git-2.8.3* && \
-  yum remove -y make curl-devel expat-devel gettext-devel openssl-devel zlib-devel gcc perl-ExtUtils-MakeMaker && \
+  yum remove -y curl-devel expat-devel gettext-devel openssl-devel zlib-devel gcc perl-ExtUtils-MakeMaker && \
   yum clean all
 
 RUN gem install asciidoctor
@@ -51,4 +51,5 @@ RUN curl -L https://github.com/fabric8io/exposecontroller/releases/download/v$EX
   chmod +x exposecontroller && \
   mv exposecontroller /usr/bin/
 
+COPY bin/* /usr/bin/
 CMD sleep infinity
