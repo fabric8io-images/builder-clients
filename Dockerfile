@@ -51,5 +51,14 @@ RUN curl -L https://github.com/fabric8io/exposecontroller/releases/download/v$EX
   chmod +x exposecontroller && \
   mv exposecontroller /usr/bin/
 
-COPY bin/* /usr/bin/
+ENV GOLANG_VERSION 1.8.1
+RUN wget https://golang.org/dl/go$GOLANG_VERSION.linux-amd64.tar.gz && \
+  tar -C /usr/local -xzf go$GOLANG_VERSION.linux-amd64.tar.gz && \
+  rm go${GOLANG_VERSION}.linux-amd64.tar.gz
+
+ENV GOROOT /usr/local/go
+ENV PATH $PATH:/go/bin
+ENV GOPATH=/go
+
+RUN go get github.com/DATA-DOG/godog
 CMD sleep infinity
