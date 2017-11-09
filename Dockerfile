@@ -16,7 +16,7 @@ RUN gem install asciidoctor
 ENV KEDGE_VERSION 0.2.0
 ENV KUBECTL_VERSION 1.5.2
 ENV EXPOSECONTROLLER_VERSION 2.3.26
-ENV GOFABRIC8_VERSION 0.4.169
+ENV GOFABRIC8_VERSION 0.4.174
 ENV HUB_VERSION 2.2.3
 
 RUN curl --retry 999 --retry-max-time 0  -sSL https://bintray.com/artifact/download/fabric8io/helm-ci/helm-v0.1.0%2B825f5ef-linux-amd64.zip > helm.zip && \
