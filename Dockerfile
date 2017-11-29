@@ -18,6 +18,9 @@ ENV KUBECTL_VERSION 1.5.2
 ENV EXPOSECONTROLLER_VERSION 2.3.26
 ENV GOFABRIC8_VERSION 0.4.176
 ENV HUB_VERSION 2.2.3
+ENV SEMVER_RELEASE_VERSION 1.0.3
+ENV DOCKER_API_VERSION 1.23
+ENV GOLANG_VERSION 1.8.1
 
 RUN curl --retry 999 --retry-max-time 0  -sSL https://bintray.com/artifact/download/fabric8io/helm-ci/helm-v0.1.0%2B825f5ef-linux-amd64.zip > helm.zip && \
   unzip helm.zip && \
@@ -45,13 +48,15 @@ RUN curl -L https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cl
 ENV PATH=$PATH:/root/home/google-cloud-sdk/bin
 
 RUN gcloud components install alpha beta
-ENV DOCKER_API_VERSION 1.23
 
 RUN curl -L https://github.com/fabric8io/exposecontroller/releases/download/v$EXPOSECONTROLLER_VERSION/exposecontroller-linux-amd64 > exposecontroller && \
   chmod +x exposecontroller && \
   mv exposecontroller /usr/bin/
 
-ENV GOLANG_VERSION 1.8.1
+RUN curl -L https://github.com/rawlingsj/semver-release-version/releases/download/v${SEMVER_RELEASE_VERSION}/semver-release-version-linux > semver-release-version && \
+  chmod +x semver-release-version && \
+  mv semver-release-version /usr/bin/
+
 RUN yum install -y wget && wget https://golang.org/dl/go$GOLANG_VERSION.linux-amd64.tar.gz && \
   tar -C /usr/local -xzf go$GOLANG_VERSION.linux-amd64.tar.gz && \
   rm go${GOLANG_VERSION}.linux-amd64.tar.gz 
