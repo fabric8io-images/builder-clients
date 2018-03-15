@@ -9,6 +9,7 @@ RUN yum update -y && \
   popd && \
   rm -rf git-2.8.3* && \
   yum remove -y curl-devel expat-devel gettext-devel openssl-devel zlib-devel gcc perl-ExtUtils-MakeMaker && \
+  yum -y install centos-release-openshift-origin && yum -y install origin-clients && \
   yum clean all
 
 RUN gem install asciidoctor
@@ -25,8 +26,6 @@ ENV GOLANG_VERSION 1.8.1
 RUN curl --retry 999 --retry-max-time 0  -sSL https://bintray.com/artifact/download/fabric8io/helm-ci/helm-v0.1.0%2B825f5ef-linux-amd64.zip > helm.zip && \
   unzip helm.zip && \
   mv helm /usr/bin/
-RUN curl --retry 999 --retry-max-time 0  -sSL https://github.com/openshift/origin/releases/download/v1.5.0/openshift-origin-client-tools-v1.5.0-031cbe4-linux-64bit.tar.gz | tar xzv && \
-  mv openshift-origin-*/* /usr/bin/
 
 RUN curl -O https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl && \
   chmod +x kubectl && \
