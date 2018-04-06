@@ -16,52 +16,51 @@
  */
 @Library('github.com/fabric8io/fabric8-pipeline-library@master')
 def utils = new io.fabric8.Utils()
-dockerTemplate{
-   clientsNode {
-    ws{
+def flow = new io.fabric8.Fabric8Commands()
+
+dockerTemplate {
+  clientsNode {
+    ws {
       checkout scm
 
-      if (utils.isCI()){
-        def snapshotImageName = "fabric8/builder-clients:SNAPSHOT-${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
-        container('docker'){
-          stage('build snapshot image'){
-            sh "docker build -t ${snapshotImageName} ."
-          }
-          stage('push snapshot image'){
-            sh "docker push ${snapshotImageName}"
+      def version = utils.isCI() ? "SNAPSHOT-${env.BRANCH_NAME}-${env.BUILD_NUMBER}" : getNewVersion{}
+      def image = "fabric8/builder-clients:${version}"
+
+      echo "Building image ${image}"
+
+      container('docker') {
+
+        stage('Build docker image') {
+          sh "docker build -t ${image} ."
+        }
+
+        stage('Push docker image') {
+          sh "docker push ${image}"
+        }
+      }
+
+      stage('Test') {
+
+        // Spawn the image just created
+        clientsNode(clientsImage:image) {
+          container('clients') {
+            echo 'Container spawned successfully'
+            sh 'cat /etc/redhat-release'
+            sh 'hostname'
+            sh 'oc version'
+            sh 'git --version'
           }
         }
-        stage('notify'){
-            def pr = env.CHANGE_ID
-            if (!pr){
-                error "no pull request number found so cannot comment on PR"
-            }
-            def message = "snapshot builder-clients image is available for testing.  `docker pull ${snapshotImageName}`"
-            container('docker'){
-                flow.addCommentToPullRequest(message, pr, project)
-            }
-        }
-      } else if (utils.isCD()){
-        
-        def v = getNewVersion{}
-        // stage('tag'){
-        //   container('clients'){
-        //     gitTag{
-        //       releaseVersion = v
-        //       skipVersionPrefix = true
-        //     }
-        //   }
-        // }
+      }
 
-        def imageName = "fabric8/builder-clients:${v}"
-
-        container('docker'){
-          stage('build image'){
-            sh "docker build -t ${imageName} ."
+      if (utils.isCI()) {
+        stage('Notify the PR') {
+          def pr = env.CHANGE_ID
+          if (!pr) {
+            error "No pull request number found so cannot comment on PR"
           }
-          stage('push image'){
-            sh "docker push ${imageName}"
-          }
+          def message = "Snapshot builder-clients image is available for testing.  `docker pull ${image}`"
+          flow.addCommentToPullRequest(message, pr, 'fabric8io-images/builder-clients')
         }
       }
     }
