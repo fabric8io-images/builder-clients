@@ -52,7 +52,10 @@ function build() {
 
     docker push ${image}
 
-    [[ $1 == "deploy" ]] && return
-
     docker run ${image} /bin/bash -xe -c 'cat /etc/redhat-release && hostname && oc version && git --version'
+
+    if [[ $1 != "deploy" ]];then
+        message="Hurray! Snapshot builder-clients image is available for testing. \`docker pull ${image}\`"
+        addCommentToPullRequest "${message}" "${ghprbPullId}" "${ghprbGhRepository}"
+    fi
 }
